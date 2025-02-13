@@ -1,0 +1,49 @@
+verifier_csv.php
+<?php
+
+function verifierFichierCSV($fichier_csv) {
+    $erreurs = [];
+
+   
+    if (($handle = fopen($fichier_csv, "r")) !== FALSE) {
+        $ligne_numero = 0;
+
+        
+        while (($ligne = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            $ligne_numero++;
+
+            
+            $numero_carte = isset($ligne[0]) ? trim($ligne[0]) : '';
+
+                        if (empty($numero_carte)) {
+                $erreurs[] = "Ligne $ligne_numero : Numéro de carte manquant";
+            }
+
+             exactement 10 chiffres
+            if (!preg_match('/^\d{10}$/', $numero_carte)) {
+                $erreurs[] = "Ligne $ligne_numero : Numéro de carte invalide ($numero_carte)";
+            }
+        }
+
+        fclose($handle);
+    } else {
+        return ["Erreur : Impossible d'ouvrir le fichier CSV."];
+    }
+
+    return $erreurs;
+}
+
+
+$fichier_csv = "electeurs.csv";  // Fichier CSV à vérifier
+$erreurs_trouvees = verifierFichierCSV($fichier_csv);
+
+if (!empty($erreurs_trouvees)) {
+    echo " Erreurs détectées :<br>";
+    foreach ($erreurs_trouvees as $erreur) {
+        echo "- $erreur <br>";
+    }
+} else {
+    echo " Aucune erreur, le fichier est valide !";
+}
+
+?>

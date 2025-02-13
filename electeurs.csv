@@ -1,0 +1,5 @@
+electeurs.csv
+1234567890,Jean Dupont,jean.dupont@email.com
+0987654321,Marie Curie,marie.curie@email.com
+12345,Paul Martin,paul.martin@email.com  # ❌ Mauvais numéro
+,Julie Robert,julie.robert@email.com      # ❌ Numéro manquant
