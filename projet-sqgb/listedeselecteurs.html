@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registre des Votants</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 25px;
+            padding: 25px;
+            background-color: #d9e4ea; /* Bleu clair pour une meilleure lisibilité */
+        }
+        h1 {
+            text-align: center;
+            color: #002855; /* Bleu foncé */
+        }
+        .container {
+            max-width: 750px; /* Augmentation de la largeur */
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        input[type="file"], input[type="text"], button {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            border: 1px solid #a0a0a0;
+            border-radius: 8px;
+            font-size: 17px;
+        }
+        button {
+            background-color: #0056b3; /* Bleu vif */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 19px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #003d80; /* Bleu encore plus foncé */
+        }
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 17px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Registre des Votants</h1>
+    <form action="upload.php">
+        <input type="file" id="fileInput" accept=".csv" required />
+        <input type="text" id="checksumInput" placeholder="Entrer l’empreinte numérique" required />
+        <button type="button" id="calculateChecksum">Générer l’empreinte</button>
+        <button type="submit">Importer le Document</button>
+    </form>
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+    document.getElementById('calculateChecksum').addEventListener('click', async () => {
+        const fileInput = document.getElementById('fileInput');
+        const checksumInput = document.getElementById('checksumInput');
+
+        if (fileInput.files.length === 0) {
+            alert("Choisissez un fichier SVP.");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const arrayBuffer = await file.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        checksumInput.value = hashHex; // Affiche l’empreinte numérique dans le champ
+    });
+
+    document.getElementById('upload.php').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Empêche le rechargement de la page
+
+        const fileInput = document.getElementById('fileInput');
+        const checksumInput = document.getElementById('checksumInput').value;
+        const messageDiv = document.getElementById('message');
+
+        const file = fileInput.files[0];
+        if (!file) {
+            messageDiv.textContent = 'Choisissez un fichier SVP.';
+            messageDiv.classList.add('error');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('checksum', checksumInput);
+
+        try {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                messageDiv.textContent = 'Document importé avec succès !';
+                messageDiv.classList.add('success');
+            } else {
+                messageDiv.textContent = `Problème détecté : ${data.error}`;
+                messageDiv.classList.add('error');
+            }
+        } catch (error) {
+            messageDiv.textContent = 'Une anomalie est survenue durant l’importation.';
+            messageDiv.classList.add('error');
+        }
+    });
+</script>
+
+</body>
+</html>
