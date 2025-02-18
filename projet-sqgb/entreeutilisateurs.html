@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription d'un Candidat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #dbeafe; /* Bleu ciel doux */
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #a0a0a0;
+            border-radius: 8px;
+            font-size: 17px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #ff6600; /* Orange vif */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #cc5200; /* Orange foncé */
+        }
+
+        .error {
+            color: red;
+            font-size: 15px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        .step {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Étape 1 : Numéro de carte d'électeur -->
+        <div id="step1" class="step active">
+            <h2>Entrer le Numéro de la Carte d'Électeur</h2>
+            <input id="numeroCandidat" placeholder="Numéro de la carte" oninput="verifierCandidat()">
+            <div id="messageErreur" class="error"></div>
+            <button id="suivantStep1" onclick="proceedStep2()" disabled>Continuer</button>
+        </div>
+
+        <!-- Étape 2 : Détails du candidat -->
+        <div id="step2" class="step">
+            <h2>Détails du Candidat</h2>
+            <label for="nom">Nom :</label>
+            <input id="nom" placeholder="Nom" disabled>
+            <label for="prenom">Prénom :</label>
+            <input id="prenom" placeholder="Prénom" disabled>
+            <label for="dateNaissance">Date de naissance :</label>
+            <input id="dateNaissance" type="date" disabled>
+            <button id="suivantStep2" onclick="proceedStep3()">Continuer</button>
+        </div>
+
+        <!-- Étape 3 : Données Supplémentaires -->
+        <div id="step3" class="step">
+            <h2>Données Supplémentaires</h2>
+            <input id="email" type="email" placeholder="Email">
+            <input id="telephone" type="tel" placeholder="Téléphone">
+            <input id="partiPolitique" placeholder="Parti Politique">
+            <input id="slogan" placeholder="Slogan">
+            <input id="photo" type="file" placeholder="Photo">
+            <input id="couleur1" placeholder="Couleur Primaire">
+            <input id="couleur2" placeholder="Couleur Secondaire">
+            <input id="couleur3" placeholder="Couleur Tertiaire">
+            <input id="url" type="url" placeholder="Lien d'information">
+            <button onclick="enregistrerCandidat()">Soumettre l'Inscription</button>
+        </div>
+
+        <!-- Étape 4 : Génération du code -->
+        <div id="step4" class="step">
+            <h2>Vérification</h2>
+            <button onclick="genererCode()">Créer un Nouveau Code</button>
+        </div>
+    </div>
+
+    <script>
+        function verifierCandidat() {
+            const numeroCandidat = document.getElementById("numeroCandidat").value;
+            const messageErreur = document.getElementById("messageErreur");
+            const suivantStep1 = document.getElementById("suivantStep1");
+
+            if (numeroCandidat === "") {
+                messageErreur.textContent = "";
+                suivantStep1.disabled = true;
+            } else if (numeroCandidat === "123456") { 
+                messageErreur.textContent = "Candidat déjà enregistré.";
+                suivantStep1.disabled = true;
+            } else {
+                messageErreur.textContent = "Aucun enregistrement trouvé pour ce numéro.";
+                suivantStep1.disabled = false;
+            }
+        }
+
+        function proceedStep2() {
+            const numeroCandidat = document.getElementById("numeroCandidat").value;
+            if (numeroCandidat && numeroCandidat !== "123456") {
+                document.getElementById("nom").value = "Durand";
+                document.getElementById("prenom").value = "Marie";
+                document.getElementById("dateNaissance").value = "1990-07-15";
+
+                document.getElementById("step1").classList.remove("active");
+                document.getElementById("step2").classList.add("active");
+            }
+        }
+
+        function proceedStep3() {
+            document.getElementById("step2").classList.remove("active");
+            document.getElementById("step3").classList.add("active");
+        }
+
+        function enregistrerCandidat() {
+            const email = document.getElementById("email").value;
+            const telephone = document.getElementById("telephone").value;
+            const partiPolitique = document.getElementById("partiPolitique").value;
+            const slogan = document.getElementById("slogan").value;
+            const photo = document.getElementById("photo").files[0];
+            const couleur1 = document.getElementById("couleur1").value;
+            const couleur2 = document.getElementById("couleur2").value;
+            const couleur3 = document.getElementById("couleur3").value;
+            const url = document.getElementById("url").value;
+
+            if (email && telephone && partiPolitique && slogan && photo && couleur1 && couleur2 && couleur3 && url) {
+                alert("Inscription réussie !");
+                document.getElementById("step3").classList.remove("active");
+                document.getElementById("step4").classList.add("active");
+            } else {
+                alert("Tous les champs sont requis.");
+            }
+        }
+
+        function genererCode() {
+            alert("Code généré avec succès !");
+        }
+    </script>
+</body>
+</html>

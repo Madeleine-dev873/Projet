@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation du Parrainage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e3f2fd; /* Bleu clair */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 350px; /* Cadre plus compact */
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #0a3d62; /* Bleu nuit */
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #0a3d62; /* Bleu foncé */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0652DD; /* Bleu plus clair */
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        .step {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .step.active {
+            display: flex;
+        }
+
+        .candidat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f1f8ff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .candidat:hover {
+            background: #dbeafe;
+        }
+
+        .candidat img {
+            width: 40px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Étape 1 -->
+        <div id="step1" class="step active">
+            <h2>Identifiez-vous</h2>
+            <input id="numeroElecteur" placeholder="Numéro de carte d’électeur" oninput="verifierElecteur()">
+            <input id="numeroCarteID" placeholder="Numéro de carte d’identité" oninput="verifierElecteur()">
+            <div id="messageErreur" class="error"></div>
+            <button id="suivantStep1" onclick="proceedStep2()" disabled>Suivant</button>
+        </div>
+
+        <!-- Étape 2 -->
+        <div id="step2" class="step">
+            <h2>Vos informations</h2>
+            <input id="nom" placeholder="Nom" disabled>
+            <input id="prenom" placeholder="Prénom" disabled>
+            <input id="dateNaissance" type="date" disabled>
+            <input id="bureauVote" placeholder="Bureau de vote" disabled>
+            <input id="codeAuthentification" placeholder="Code d'authentification">
+            <button id="suivantStep2" onclick="proceedStep3()">Suivant</button>
+        </div>
+
+        <!-- Étape 3 -->
+        <div id="step3" class="step">
+            <h2>Choisissez un candidat</h2>
+            <div id="candidatsList">
+                <div class="candidat" onclick="selectCandidat(1)">
+                    <img src="candidat1.jpg" alt="Candidat 1">
+                    <span>Candidat 1 - Parti A</span>
+                </div>
+                <div class="candidat" onclick="selectCandidat(2)">
+                    <img src="candidat2.jpg" alt="Candidat 2">
+                    <span>Candidat 2 - Parti B</span>
+                </div>
+            </div>
+            <button id="suivantStep3" onclick="proceedStep4()" disabled>Suivant</button>
+        </div>
+
+        <!-- Étape 4 -->
+        <div id="step4" class="step">
+            <h2>Entrez le code de vérification</h2>
+            <input id="codeVerification" placeholder="Code à 5 chiffres">
+            <button onclick="validerParrainage()">Valider</button>
+        </div>
+
+        <!-- Étape 5 -->
+        <div id="step5" class="step">
+            <h2>Parrainage validé ✅</h2>
+            <p>Un code de confirmation vous a été envoyé.</p>
+            <button onclick="resetForm()">Retour</button>
+        </div>
+    </div>
+
+    <script>
+        let candidatSelectionne = null;
+
+        function verifierElecteur() {
+            const numeroElecteur = document.getElementById("numeroElecteur").value;
+            const numeroCarteID = document.getElementById("numeroCarteID").value;
+            const messageErreur = document.getElementById("messageErreur");
+            const suivantStep1 = document.getElementById("suivantStep1");
+
+            if (numeroElecteur === "" || numeroCarteID === "") {
+                messageErreur.textContent = "";
+                suivantStep1.disabled = true;
+            } else if (numeroElecteur === "123456" && numeroCarteID === "654321") {
+                messageErreur.textContent = "";
+                suivantStep1.disabled = false;
+            } else {
+                messageErreur.textContent = "Informations incorrectes.";
+                suivantStep1.disabled = true;
+            }
+        }
+
+        function proceedStep2() {
+            document.getElementById("nom").value = "Durand";
+            document.getElementById("prenom").value = "Marie";
+            document.getElementById("dateNaissance").value = "1990-07-15";
+            document.getElementById("bureauVote").value = "Bureau A";
+
+            document.getElementById("step1").classList.remove("active");
+            document.getElementById("step2").classList.add("active");
+        }
+
+        function selectCandidat(id) {
+            candidatSelectionne = id;
+            document.getElementById("suivantStep3").disabled = false;
+        }
+
+        function proceedStep3() {
+            document.getElementById("step2").classList.remove("active");
+            document.getElementById("step3").classList.add("active");
+        }
+
+        function proceedStep4() {
+            document.getElementById("step3").classList.remove("active");
+            document.getElementById("step4").classList.add("active");
+        }
+
+        function validerParrainage() {
+            const codeVerification = document.getElementById("codeVerification").value;
+
+            if (codeVerification === "12345") {
+                alert("Parrainage validé !");
+                document.getElementById("step4").classList.remove("active");
+                document.getElementById("step5").classList.add("active");
+            } else {
+                alert("Code incorrect.");
+            }
+        }
+
+        function resetForm() {
+            document.getElementById("step5").classList.remove("active");
+            document.getElementById("step1").classList.add("active");
+            document.getElementById("numeroElecteur").value = "";
+            document.getElementById("numeroCarteID").value = "";
+        }
+    </script>
+</body>
+</html>
