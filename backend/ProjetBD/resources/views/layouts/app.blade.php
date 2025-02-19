@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
@@ -79,5 +80,10 @@
             @yield('content')
         </main>
     </div>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('import.page') }}">Importation des Électeurs</a>
+    </li>
+
 </body>
 </html>
