@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+ 
 use App\Http\Controllers\UploadController;
+
+use App\Http\Controllers\ElectorUploadController;
+ 
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +27,14 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
+
 Route::post('/upload', [UploadController::class, 'uploadFile'])->name('upload.file');
 // Route GET pour afficher la page d'upload
 Route::get('/upload', [UploadController::class, 'showUploadForm'])->name('upload.form');
 Route::post('/import-csv', [UploadController::class, 'importCSV'])->name('import.csv');
+
+Route::post('/upload-electors', [ElectorUploadController::class, 'upload'])->name('upload.electors');
+Route::get('/import', function () {
+    return view('import');
+})->name('import.page');
+
