@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateElecteursTable extends Migration
+class AddColumnsToElecteursTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateElecteursTable extends Migration
      */
     public function up()
     {
-        Schema::create('electeurs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('electeurs', function (Blueprint $table) {
+            //
         });
     }
 
@@ -26,6 +25,8 @@ class CreateElecteursTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('electeurs');
+        Schema::table('electeurs', function (Blueprint $table) {
+            //
+        });
     }
 }

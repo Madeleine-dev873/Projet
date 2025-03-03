@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\UploadLog;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\UploadLog;
+use App\Models\Electeur;
 
 class UploadController extends Controller
 {
@@ -14,7 +15,7 @@ class UploadController extends Controller
     {
         // Validation du fichier
         $request->validate([
-            'document' => 'required|file|mimes:csv,txt|max:2048' // Accepte CSV & TXT, max 2MB
+            'document' => 'required|file|mimes:csv,txt|max:2048'
         ]);
 
         $file = $request->file('document');
@@ -34,9 +35,9 @@ class UploadController extends Controller
         if (!$file->isValid()) {
             UploadLog::create([
                 'filename' => $file->getClientOriginalName(),
-                'reason' => 'Fichier corrompu ou invalide',
-                'user_ip' => $request->ip(),
-                'user_id' => Auth::id(),
+                'reason'   => 'Fichier corrompu ou invalide',
+                'user_ip'  => $request->ip(),
+                'user_id'  => Auth::id(),
             ]);
             return back()->with('error', 'Le fichier est corrompu ou invalide.');
         }
@@ -47,9 +48,9 @@ class UploadController extends Controller
         // Log dans la table UploadLog
         UploadLog::create([
             'filename' => $file->getClientOriginalName(),
-            'reason' => 'Fichier valide et checksum vérifié',
-            'user_ip' => $request->ip(),
-            'user_id' => Auth::id(),
+            'reason'   => 'Fichier valide et checksum vérifié',
+            'user_ip'  => $request->ip(),
+            'user_id'  => Auth::id(),
         ]);
 
         return back()->with('success', 'Fichier uploadé avec succès et checksum validé !');
@@ -58,10 +59,9 @@ class UploadController extends Controller
     // Méthode pour afficher le formulaire de téléchargement
     public function showUploadForm()
     {
-        // Récupérer les logs d'upload
+        // Ici on récupère tous les logs (utilise UploadLog ou un autre modèle si nécessaire)
         $logs = UploadLog::all();
-    
-        // Passer les logs à la vue
+
         return view('upload', compact('logs'));
     }
 
@@ -73,24 +73,45 @@ class UploadController extends Controller
             'csv_file' => 'required|file|mimes:csv,txt|max:2048'
         ]);
 
-        // Récupérer le fichier CSV
+        // Récupérer le fichier CSV et le stocker
         $file = $request->file('csv_file');
-
-        // Lire le fichier CSV
         $filePath = $file->storeAs('uploads', $file->getClientOriginalName());
-        $csvData = array_map('str_getcsv', file(Storage::path($filePath)));
+        $fullPath = Storage::path($filePath);
 
-        // Enregistrer chaque ligne du CSV dans la base de données
-        foreach ($csvData as $row) {
-            // Ajuster l'index des champs en fonction de votre structure CSV
-            UploadLog::create([
-                'filename' => $row[0],
-                'reason' => $row[1],
-                'user_ip' => $row[2],
-                'attempted_at' => $row[3],
-            ]);
+        // Ouvrir le fichier pour lecture
+        if (($handle = fopen($fullPath, 'r')) === false) {
+            return back()->with('error', 'Impossible d\'ouvrir le fichier.');
         }
 
-        return back()->with('success', 'CSV importé avec succès.');
+        $importCount = 0;
+        $errors = [];
+
+        // Supposons que la première ligne contient les en-têtes, on la saute
+        $header = fgetcsv($handle, 1000, ',');
+
+        // Lecture ligne par ligne du CSV
+        while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+            try {
+                Electeur::create([
+                    'nom'            => $data[0] ?? null,
+                    'prenom'         => $data[1] ?? null,
+                    'date_naissance' => $data[2] ?? null,
+                    'numero_carte'   => $data[3] ?? null,
+                    'adresse'        => $data[4] ?? null,
+                    'telephone'      => $data[5] ?? null,
+                ]);
+                $importCount++;
+            } catch (\Exception $e) {
+                $errors[] = "Erreur pour la ligne : " . implode(',', $data) . " : " . $e->getMessage();
+            }
+        }
+        fclose($handle);
+
+        $message = "CSV importé avec succès. {$importCount} électeurs importés.";
+        if (!empty($errors)) {
+            $message .= " Certaines erreurs sont survenues lors de l'import.";
+        }
+
+        return back()->with('success', $message);
     }
 }

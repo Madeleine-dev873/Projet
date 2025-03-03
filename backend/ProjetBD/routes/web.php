@@ -1,40 +1,57 @@
 <?php
+namespace App\Http\Controllers\Auth;
 
 use Illuminate\Support\Facades\Route;
- 
 use App\Http\Controllers\UploadController;
-
 use App\Http\Controllers\ElectorUploadController;
- 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ElecteurController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
+// Page d'accueil (Bienvenue)
 Route::get('/', function () {
     return view('welcome');
+})->name('welcome');
+
+// Authentification (remplace Auth::routes() pour éviter les erreurs de redirection)
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
+
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+
+// Redirection après connexion
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
+// Routes protégées (nécessitent une connexion)
+Route::middleware(['auth'])->group(function () {
+    // Upload de fichiers généraux
+    Route::post('/upload', [UploadController::class, 'showUploadForm'])->name('upload.form');
+    Route::post('/upload', [UploadController::class, 'uploadFile'])->name('upload.file');
+    Route::post('/import-csv', [UploadController::class, 'importCSV'])->name('import.csv');
+
+    // Upload des électeurs
+    Route::post('/upload-electors', [ElectorUploadController::class, 'uploadElectors'])->name('upload-electors');
+
+
+    // Page d'importation
+    Route::post('/import', function () {
+        return view('import');
+    })->name('import.page');
 });
+Route::get('/upload-electors', function () {
+    return view('upload'); // Assure-toi que ce fichier Blade existe
+})->name('upload-electors.form')->middleware('auth');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
-
-Route::post('/upload', [UploadController::class, 'uploadFile'])->name('upload.file');
-// Route GET pour afficher la page d'upload
-Route::get('/upload', [UploadController::class, 'showUploadForm'])->name('upload.form');
-Route::post('/import-csv', [UploadController::class, 'importCSV'])->name('import.csv');
-
-Route::post('/upload-electors', [ElectorUploadController::class, 'upload'])->name('upload.electors');
-Route::get('/import', function () {
-    return view('import');
-})->name('import.page');
-
+Route::post('/upload-electors', [UploadController::class, 'uploadFile'])->name('upload-electors');
+Route::get('/hash-electeurs', [UploadController::class, 'showHash'])->name('hash-electeurs');
+Route::get('/electeurs', [ElecteurController::class, 'index'])->name('electeurs.index');

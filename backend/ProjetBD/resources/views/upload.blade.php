@@ -67,7 +67,8 @@
         @endif
 
         <!-- Formulaire -->
-        <form action="{{ route('upload.file') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('upload-electors') }}" method="POST" enctype="multipart/form-data">
+        >
             @csrf
             <div class="form-group">
                 <label for="document">Choisir un fichier CSV :</label>
@@ -84,31 +85,5 @@
     </div>
 </div>
 
-<!-- Section des logs -->
-<div class="container table-container">
-    <h3 class="text-center">📋 Historique des Uploads</h3>
 
-    <table class="table table-bordered table-striped mt-3">
-        <thead class="thead-dark">
-            <tr>
-                <th>Nom du fichier</th>
-                <th>Raison du rejet</th>
-                <th>Utilisateur</th>
-                <th>IP</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($logs as $log)
-            <tr>
-                <td>{{ $log->filename }}</td>
-                <td>{{ $log->reason }}</td>
-                <td>{{ $log->user ? $log->user->name : 'Anonyme' }}</td>
-                <td>{{ $log->user_ip }}</td>
-                <td>{{ $log->attempted_at }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
 @endsection

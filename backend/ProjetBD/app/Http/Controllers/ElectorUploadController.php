@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ElectorUploadController extends Controller
 {
-    public function upload(Request $request)
+    public function uploadElectors(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:csv,txt|max:2048',

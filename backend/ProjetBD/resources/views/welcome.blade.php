@@ -59,7 +59,7 @@
     <div class="container sections">
         <div class="row justify-content-center">
             <div class="col-md-3">
-                <a href="{{ route('upload.electors') }}" class="text-decoration-none">
+                <a href="{{ route('upload-electors') }}" class="text-decoration-none">
                     <div class="card">
                         <img src="https://i0.wp.com/dubawa.org/wp-content/uploads/2024/11/Senegal.jpg" alt="Importation des Électeurs" class="img-fluid">
                         <h5 class="mt-3">Importation des Électeurs</h5>
@@ -67,7 +67,7 @@
                 </a>
             </div>
             <div class="col-md-3">
-                <a href="{{ route('upload.electors') }}" class="text-decoration-none">
+                <a href="{{ route('upload-electors') }}" class="text-decoration-none">
                     <div class="card">
                         <img src="https://ichef.bbci.co.uk/news/1024/branded_afrique/96c4/live/82b4e150-62bc-11ee-a8e6-efc60698ab1d.jpg" alt="Suivi des Parrainages" class="img-fluid">
                         <h5 class="mt-3">Suivi des Parrainages</h5>
@@ -75,7 +75,7 @@
                 </a>
             </div>
             <div class="col-md-3">
-                <a href="{{ route('upload.electors') }}" class="text-decoration-none">
+                <a href="{{ route('upload-electors') }}" class="text-decoration-none">
                     <div class="card">
                         <img src="https://ichef.bbci.co.uk/news/1024/branded_afrique/58aa/live/a5136aa0-e868-11ee-9410-0f893255c2a0.jpg" alt="Liste des Candidats" class="img-fluid">
                         <h5 class="mt-3">Liste des Candidats</h5>
@@ -99,6 +99,7 @@
             <p class="mb-0">© 2025 Élections Présidentielles du Sénégal - Tous droits réservés</p>
             <p class="mb-0">Développé avec ❤️ pour une démocratie transparente</p>
         </div>
+        
     </footer>
 
 </body>
