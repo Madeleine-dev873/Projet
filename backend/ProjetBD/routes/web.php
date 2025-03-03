@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ElectorUploadController;
@@ -8,6 +8,11 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ElecteurController;
+use App\Models\Candidat;
+use App\Http\Controllers\CandidatController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +57,27 @@ Route::get('/upload-electors', function () {
     return view('upload'); // Assure-toi que ce fichier Blade existe
 })->name('upload-electors.form')->middleware('auth');
 
+
 Route::post('/upload-electors', [UploadController::class, 'uploadFile'])->name('upload-electors');
 Route::get('/hash-electeurs', [UploadController::class, 'showHash'])->name('hash-electeurs');
 Route::get('/electeurs', [ElecteurController::class, 'index'])->name('electeurs.index');
+
+Auth::routes();
+Route::get('/choisir-role', function () {
+    return view('auth.role_selection');
+})->name('choisir.role');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/import', function () {
+    return view('import');
+})->name('import.page');
+
+Route::get('/suivi-parrainages', [SuiviParrainageController::class, 'SuiviParrainage.php'])->name('suivi.parrainages');
+
+Route::get('/candidats', [CandidatController::class, 'index'])->name('candidats.index');
+Route::post('/candidats', [CandidatController::class, 'store'])->name('candidats.store');
+
+Route::get('/liste-candidats', [CandidatController::class, 'listeCandidats'])->name('liste.candidats');
+
