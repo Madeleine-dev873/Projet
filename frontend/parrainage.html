@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration du Parrainage</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #e3f2fd; /* Bleu clair */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 350px; /* Cadre plus petit */
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 18px;
+            color: #0a3d62; /* Bleu nuit */
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #0a3d62; /* Bleu foncé */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0652DD; /* Bleu plus clair */
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Définir la Période de Parrainage</h1>
+        <form id="parrainage-form">
+            <label for="date-debut">📅 Début :</label>
+            <input type="date" id="date-debut" name="date-debut" required>
+
+            <label for="date-fin">📅 Fin :</label>
+            <input type="date" id="date-fin" name="date-fin" required>
+
+            <button type="submit">Confirmer</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('parrainage-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const dateDebut = new Date(document.getElementById('date-debut').value);
+            const dateFin = new Date(document.getElementById('date-fin').value);
+            const today = new Date();
+            const dateLimite = new Date(today);
+            dateLimite.setMonth(today.getMonth() + 6);
+
+            if (dateDebut >= dateFin) {
+                document.getElementById('message').innerHTML = "⚠️ La date de début doit précéder la date de fin.";
+                document.getElementById('message').style.color = "red";
+                return;
+            }
+
+            if (dateDebut < dateLimite) {
+                document.getElementById('message').innerHTML = "⏳ La date de début doit être au moins 6 mois après aujourd’hui.";
+                document.getElementById('message').style.color = "red";
+                return;
+            }
+
+            document.getElementById('message').innerHTML = "✅ Période de parrainage enregistrée avec succès !";
+            document.getElementById('message').style.color = "green";
+        });
+    </script>
+</body>
+</html>
