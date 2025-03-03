@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Saisie Candidat</title>
+    <style>
+        body { background: url('https://www.francophonie.org/sites/default/files/2024-11/3_0.jpg') no-repeat center center fixed; background-size: cover; font-family: Arial; }
+        .container { background: white; padding: 20px; max-width: 600px; margin: 50px auto; }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Saisie du Candidat</h2>
+    <input type="text" id="numeroCarte" placeholder="Numéro de Carte d'Électeur">
+    <button onclick="verifierElecteur()">Vérifier</button>
+
+    <div id="formulaireCandidat" style="display:none;">
+        <p><strong>Nom:</strong> <span id="nom"></span></p>
+        <p><strong>Prénom:</strong> <span id="prenom"></span></p>
+        <p><strong>Date de naissance:</strong> <span id="dateNaissance"></span></p>
+
+        <input type="email" id="email" placeholder="Email">
+        <input type="text" id="telephone" placeholder="Téléphone">
+        <input type="text" id="parti" placeholder="Parti Politique">
+        <input type="text" id="slogan" placeholder="Slogan">
+        <input type="text" id="photo" placeholder="Photo URL">
+        <input type="text" id="couleurs" placeholder="Couleurs (séparées par des virgules)">
+        <input type="url" id="urlInfos" placeholder="Lien vers la campagne">
+        <button onclick="enregistrerCandidat()">Enregistrer</button>
+    </div>
+
+    <p id="message"></p>
+</div>
+
+<script>
+let electeurs = [];
+
+// Simulation de lecture du fichier CSV (en vrai, il faudrait charger electeur.csv via une requête AJAX ou via une API en PHP)
+const csv = `numero_carte,nom,prenom,date_naissance
+123456789,Diop,Aissatou,1985-03-15
+987654321,Ndoye,Ibrahima,1990-07-22
+`;
+
+function chargerElecteurs() {
+    const lignes = csv.trim().split("\n").slice(1);  // Correction ici: Utilisez "\n" pour séparer les lignes
+    electeurs = lignes.map(ligne => {
+        const [numero_carte, nom, prenom, date_naissance] = ligne.split(",");
+        return { numero_carte, nom, prenom, date_naissance };
+    });
+}
+
+function verifierElecteur() {
+    const numero = document.getElementById('numeroCarte').value;
+    const electeur = electeurs.find(e => e.numero_carte === numero);
+
+    if (!electeur) {
+        document.getElementById('message').innerText = "Le candidat n'est pas présent dans le fichier électoral.";
+        document.getElementById('formulaireCandidat').style.display = 'none';
+    } else {
+        document.getElementById('nom').innerText = electeur.nom;
+        document.getElementById('prenom').innerText = electeur.prenom;
+        document.getElementById('dateNaissance').innerText = electeur.date_naissance;
+        document.getElementById('formulaireCandidat').style.display = 'block';
+        document.getElementById('message').innerText = '';
+    }
+}
+
+function enregistrerCandidat() {
+    const numero = document.getElementById('numeroCarte').value;
+    const email = document.getElementById('email').value;
+    const telephone = document.getElementById('telephone').value;
+    const parti = document.getElementById('parti').value;
+    const slogan = document.getElementById('slogan').value;
+    const photo = document.getElementById('photo').value;
+    const couleurs = document.getElementById('couleurs').value;
+    const urlInfos = document.getElementById('urlInfos').value;
+    const codeSecurite = Math.floor(100000 + Math.random() * 900000);
+
+    const candidat = {
+        numero,
+        email,
+        telephone,
+        parti,
+        slogan,
+        photo,
+        couleurs,
+        urlInfos,
+        codeSecurite
+    };
+
+    let candidats = JSON.parse(localStorage.getItem('candidats')) || [];
+    candidats.push(candidat);
+    localStorage.setItem('candidats', JSON.stringify(candidats));
+
+    alert(`Candidat enregistré avec succès ! Un code de sécurité ${codeSecurite} a été envoyé.`);
+    window.location.href = "liste.html";  // Redirection vers la liste
+}
+
+chargerElecteurs();
+</script>
+
+</body>
+</html>
