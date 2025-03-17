@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>État des Parrainages</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #e3f2fd; /* Bleu clair */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 350px; /* Cadre plus compact */
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #0a3d62; /* Bleu nuit */
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input[type="email"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #0a3d62; /* Bleu foncé */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0652DD; /* Bleu plus clair */
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .parrainage-details {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f1f8ff;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #87CEEB;
+        }
+
+        .parrainage-details h3 {
+            font-size: 18px;
+            color: #0a3d62;
+            margin-bottom: 10px;
+        }
+
+        .parrainage-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .parrainage-details li {
+            font-size: 14px;
+            color: #333;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>État des Parrainages</h1>
+        <form id="auth-form">
+            <label for="email">📩 Adresse Email :</label>
+            <input type="email" id="email" name="email" required placeholder="Saisissez votre email">
+
+            <label for="auth-code">🔑 Code d'Accès :</label>
+            <input type="text" id="auth-code" name="auth-code" required placeholder="Saisissez votre code secret">
+
+            <button type="submit">Connexion</button>
+        </form>
+
+        <div id="message"></div>
+
+        <!-- Détails des parrainages -->
+        <div id="parrainage-details" class="parrainage-details">
+            <h3>🔍 Suivi des Parrainages</h3>
+            <p id="parrainage-info">Chargement en cours...</p>
+        </div>
+    </div>
+
+    <script>
+        const validAuthCode = "123456";  
+        const validEmail = "candidat@example.com";  
+        const parrainages = [
+            { date: "2025-02-10", nombre: 5 },
+            { date: "2025-02-11", nombre: 8 },
+            { date: "2025-02-12", nombre: 10 },
+        ];  
+
+        document.getElementById('auth-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const authCode = document.getElementById('auth-code').value;
+
+            if (email === validEmail && authCode === validAuthCode) {
+                document.getElementById('message').innerHTML = "✅ Connexion réussie !";
+                document.getElementById('message').style.color = "green";
+                document.getElementById('parrainage-details').style.display = "block";
+                afficherParrainages();
+            } else {
+                document.getElementById('message').innerHTML = "❌ Email ou code incorrect.";
+                document.getElementById('message').style.color = "red";
+            }
+        });
+
+        function afficherParrainages() {
+            const parrainageInfo = document.getElementById('parrainage-info');
+            let htmlContent = "<ul>";
+
+            parrainages.forEach(parrainage => {
+                htmlContent += `<li>📅 ${parrainage.date} : <strong>${parrainage.nombre}</strong> parrainages</li>`;
+            });
+
+            htmlContent += "</ul>";
+            parrainageInfo.innerHTML = htmlContent;
+        }
+    </script>
+</body>
+</html>
