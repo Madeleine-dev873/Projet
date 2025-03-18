@@ -9,6 +9,8 @@ class UploadLog extends Model
 {
     use HasFactory;
 
+    public $timestamps = true; 
+
     // Utiliser le nom exact de la table dans la base de données
     protected $table = 'uploads_logs';
 

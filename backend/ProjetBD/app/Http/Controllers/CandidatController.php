@@ -63,8 +63,8 @@ class CandidatController extends Controller
 
 public function listeCandidats()
 {
-    $candidats = Candidat::all(); // Récupère tous les candidats
-    return response()->json($candidats); // Retourne les données en JSON
+    $candidats = Candidat::all(); 
+    return response()->json($candidats); 
 }
 
 
