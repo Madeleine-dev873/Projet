@@ -83,6 +83,7 @@
                 <a href="{{ route('upload-electors') }}" class="text-decoration-none">
 
                 <a href="{{ route('liste-candidats') }}" class="text-decoration-none">
+                <a href="{{ route('electeurs.create') }}" class="text-decoration-none">
 
                     <div class="card">
                         <img src="https://ichef.bbci.co.uk/news/1024/branded_afrique/58aa/live/a5136aa0-e868-11ee-9410-0f893255c2a0.jpg" alt="Liste des Candidats" class="img-fluid">

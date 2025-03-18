@@ -61,6 +61,8 @@ public function index()
 {
     $candidats = Candidat::all(); // Récupère tous les candidats
     return view('liste-candidats', compact('candidats'));
+    $candidats = Candidat::all(); 
+    return response()->json($candidats); 
 }
 
 

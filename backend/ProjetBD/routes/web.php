@@ -12,6 +12,7 @@ use App\Models\Candidat;
 use App\Http\Controllers\CandidatController;
 use App\http\Controllers\SuiviParrainageController;
 use App\Http\Controllers\ParrainageController;
+use App\Http\Controllers\DateParrainageController;
 
 
 
@@ -99,3 +100,13 @@ Route::post('parrainages/{candidat}/show', [ParrainageController::class, 'create
 
 
 
+Route::get('/define-dates', function () {
+    return view('define-dates');
+})->name('define-dates');
+
+Route::post('/update-dates', [DateParrainageController::class, 'updateDates'])->name('update-dates');
+
+
+Route::get('/inscription', [ElecteurController::class, 'create'])->name('electeurs.create');
+Route::post('/inscription', [ElecteurController::class, 'store'])->name('electeurs.store');
+Route::post('/electeurs/store', [ElecteurController::class, 'store'])->name('electeurs.store');

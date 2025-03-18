@@ -17,10 +17,11 @@
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         color: white;
         text-align: center;
+        margin-top: -50px; /* Remonter légèrement le formulaire */
     }
 
-    /* Style du bouton */
-    .btn-upload {
+    /* Style des boutons */
+    .btn-action {
         background-color: #28a745;
         border: none;
         color: white;
@@ -29,10 +30,22 @@
         font-size: 18px;
         border-radius: 5px;
         transition: 0.3s;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px; /* Espacement entre l'icône et le texte */
     }
 
-    .btn-upload:hover {
+    .btn-action:hover {
         background-color: #218838;
+    }
+
+    /* Espacement entre les boutons */
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Augmente l'espace entre les boutons */
     }
 
     /* Centrer le formulaire */
@@ -41,15 +54,6 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-    }
-
-    /* Table stylisée */
-    .table-container {
-        background: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-        margin-top: 20px;
     }
 </style>
 
@@ -68,7 +72,6 @@
 
         <!-- Formulaire -->
         <form action="{{ route('upload-electors') }}" method="POST" enctype="multipart/form-data">
-        >
             @csrf
             <div class="form-group">
                 <label for="document">Choisir un fichier CSV :</label>
@@ -80,10 +83,21 @@
                 <input type="text" name="checksum" id="checksum" class="form-control" placeholder="Saisir l'empreinte SHA256" required>
             </div>
 
-            <button type="submit" class="btn-upload">Télécharger et Vérifier</button>
+            <div class="button-group">
+                <button type="submit" class="btn-action">
+                    <i class="fas fa-upload"></i> 📤 Télécharger et Vérifier
+                </button>
+
+                <!-- Bouton Définir les Dates avec icône -->
+                <a href="{{ route('define-dates') }}" class="btn-action">
+                    <i class="fas fa-calendar-alt"></i> 📅 Définir les dates de parrainage
+                </a>
+            </div>
         </form>
     </div>
 </div>
 
+<!-- Inclure FontAwesome pour les icônes -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 @endsection
