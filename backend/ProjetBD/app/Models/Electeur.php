@@ -14,8 +14,12 @@ class Electeur extends Model
         'nom',
         'prenom',
         'date_naissance',
-        'numero_carte',
+        'numero_carte_electeur',
+        'numero_carte_identite', 
         'adresse',
+        'bureau_vote', 
         'telephone',
+        'email', 
     ];
+    
 }
