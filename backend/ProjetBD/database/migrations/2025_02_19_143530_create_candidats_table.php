@@ -13,6 +13,7 @@ class CreateCandidatsTable extends Migration
      */
     public function up()
     {
+        // Crée la table 'candidats' si elle n'existe pas
         Schema::create('candidats', function (Blueprint $table) {
             $table->id('idCandidat');
             $table->string('numeroCarteElecteur', 20)->unique();

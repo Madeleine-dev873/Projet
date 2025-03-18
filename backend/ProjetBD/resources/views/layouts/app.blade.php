@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+ <!-- Lien vers le fichier CSS compilé -->
+ <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @if(Auth::check())
     <span>Bienvenue, {{ Auth::user()->name }}</span>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">

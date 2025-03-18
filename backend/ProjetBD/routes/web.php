@@ -10,6 +10,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ElecteurController;
 use App\Models\Candidat;
 use App\Http\Controllers\CandidatController;
+use App\http\Controllers\SuiviParrainageController;
+use App\Http\Controllers\ParrainageController;
 
 
 
@@ -67,17 +69,33 @@ Route::get('/choisir-role', function () {
     return view('auth.role_selection');
 })->name('choisir.role');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::get('/import', function () {
     return view('import');
 })->name('import.page');
 
-Route::get('/suivi-parrainages', [SuiviParrainageController::class, 'SuiviParrainage.php'])->name('suivi.parrainages');
+
 
 Route::get('/candidats', [CandidatController::class, 'index'])->name('candidats.index');
 Route::post('/candidats', [CandidatController::class, 'store'])->name('candidats.store');
 
-Route::get('/liste-candidats', [CandidatController::class, 'listeCandidats'])->name('liste.candidats');
+Route::get('/liste-candidats', [CandidatController::class, 'index'])->name('liste-candidats');
+
+
+Route::get('/suivi-parrainage', [SuiviParrainageController::class, 'index'])->name('suivi-parrainage');
+
+
+Route::resource('parrainages', ParrainageController::class);
+
+Route::get('parrainages/{candidat}/create', [ParrainageController::class, 'parrainer'])->name('parrainages.create');
+Route::post('parrainages/{candidat}/store', [ParrainageController::class, 'Soumettre le Parrainage'])->name('parrainages.store');
+Route::post('parrainages/{candidat}/show', [ParrainageController::class, 'create'])->name('parrainage.show');
+
+
+
+
+
+
 

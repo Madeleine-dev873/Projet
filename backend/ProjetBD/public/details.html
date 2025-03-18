@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Détails du Candidat</title>
+    <style>
+        body { background: url('https://www.francophonie.org/sites/default/files/2024-11/3_0.jpg') no-repeat center center fixed; background-size: cover; font-family: Arial; }
+        .container { background: white; padding: 20px; max-width: 600px; margin: 50px auto; }
+        h2 { text-align: center; }
+        p { font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Détails du Candidat</h2>
+    <p><strong>Nom:</strong> <span id="nom"></span></p>
+    <p><strong>Prénom:</strong> <span id="prenom"></span></p>
+    <p><strong>Date de naissance:</strong> <span id="dateNaissance"></span></p>
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p><strong>Téléphone:</strong> <span id="telephone"></span></p>
+    <p><strong>Parti Politique:</strong> <span id="parti"></span></p>
+    <p><strong>Slogan:</strong> <span id="slogan"></span></p>
+    <p><strong>Photo:</strong> <img id="photo" src="" alt="Photo du candidat" width="100"></p>
+    <p><strong>Couleurs:</strong> <span id="couleurs"></span></p>
+    <p><strong>Lien vers la campagne:</strong> <a id="urlInfos" href="" target="_blank">Campagne</a></p>
+</div>
+
+<script>
+window.onload = function() {
+    const candidats = JSON.parse(localStorage.getItem('candidats')) || [];
+    const numero = localStorage.getItem('candidatId');
+
+    if (numero) {
+        const candidat = candidats.find(c => c.numero === numero);
+        if (candidat) {
+            document.getElementById('nom').innerText = candidat.nom;
+            document.getElementById('prenom').innerText = candidat.prenom;
+            document.getElementById('dateNaissance').innerText = candidat.date_naissance;
+            document.getElementById('email').innerText = candidat.email;
+            document.getElementById('telephone').innerText = candidat.telephone;
+            document.getElementById('parti').innerText = candidat.parti;
+            document.getElementById('slogan').innerText = candidat.slogan;
+            document.getElementById('photo').src = candidat.photo;
+            document.getElementById('couleurs').innerText = candidat.couleurs;
+            document.getElementById('urlInfos').href = candidat.urlInfos;
+        }
+    }
+};
+</script>
+
+</body>
+</html>

@@ -7,11 +7,7 @@ use App\Models\Candidat;
 
 class CandidatController extends Controller
 {
-    public function index()
-    {
-        $candidats = Candidat::all();
-        return view('candidats.index', compact('candidats'));
-    }
+   
 
     public function create()
     {
@@ -61,10 +57,10 @@ class CandidatController extends Controller
     ]);
 }
 
-public function listeCandidats()
+public function index()
 {
     $candidats = Candidat::all(); // Récupère tous les candidats
-    return response()->json($candidats); // Retourne les données en JSON
+    return view('liste-candidats', compact('candidats'));
 }
 
 

@@ -74,9 +74,9 @@
             if (role === 'dge') {
                 window.location.href = "{{ route('upload-electors') }}";
             } else if (role === 'candidat') {
-                window.location.href = "{{ route('suivi.parrainages') }}";
+                window.location.href = "{{ route('suivi-parrainage') }}";
             } else if (role === 'electeur') {
-                window.location.href = "{{ route('liste.candidats') }}";
+                window.location.href = "{{ route('liste-candidats') }}";
             }
         }
     </script>
